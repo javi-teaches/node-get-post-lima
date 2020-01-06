@@ -1,0 +1,14 @@
+[
+ {
+  "id": 2,
+  "nombre_producto": "Compu 2",
+  "precio_producto": "09876543",
+  "descripcion_producto": "un proyector"
+ },
+ {
+  "id": 5,
+  "nombre_producto": "Borrador",
+  "precio_producto": "12",
+  "descripcion_producto": "un borrador "
+ }
+]

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Home Page</title>
+</head>
+<body>
+
+	<ul>
+		<% productos.forEach(function (unProducto) { %>
+			<li> 
+				<b>Nombre:</b> <%= unProducto.nombre_producto %>  <br>
+				<b>Precio:</b> $<%= unProducto.precio_producto %>  <br>
+				<b>Detalle:</b> <%= unProducto.descripcion_producto %>  <br>
+				<form action="/borrar/<%= unProducto.id %>?_method=DELETE" method="POST">
+					<button>BORRAR</button>
+				</form>
+				<hr>
+			</li>	
+		<% }) %>
+	</ul>
+	
+</body>
+</html>
