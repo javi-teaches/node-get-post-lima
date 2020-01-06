@@ -3,21 +3,28 @@ const path = require('path');
 
 const ubicacionProductos = './src/data/productos.json';
 
-let contenidoProductos = fs.readFileSync(ubicacionProductos, 'utf-8');
+function traerProductos () {
+	let contenidoProductos = fs.readFileSync(ubicacionProductos, 'utf-8');
+	contenidoProductos = contenidoProductos == '' ? [] : JSON.parse(contenidoProductos);
+	return contenidoProductos;
+}
 
-contenidoProductos = contenidoProductos == '' ? [] : JSON.parse(contenidoProductos);
+function guardarProductos (productos) {
+	fs.writeFileSync(ubicacionProductos, JSON.stringify(productos, null, ' '));
+}
 
 function generarId () {
-	if (contenidoProductos.length == 0) {
+	let productos = traerProductos();
+	if (productos.length == 0) {
 		return 1;
 	}
-	let elUltimoProducto = contenidoProductos[contenidoProductos.length - 1];
+	let elUltimoProducto = productos.pop();
 	return elUltimoProducto.id + 1;
 }
 
 const controller = {
 	index: (req, res) => {
-		res.render('index', { productos: contenidoProductos });
+		res.render('index', { productos: traerProductos() });
 	},
 	crear: function (req, res) {
 		res.render('formulario');
@@ -27,17 +34,19 @@ const controller = {
 			id: generarId(),
 			...req.body,
 		}
-		contenidoProductos.push(req.body);
-		fs.writeFileSync(ubicacionProductos, JSON.stringify(contenidoProductos, null, ' '));
+		let productos = traerProductos();
+		productos.push(req.body);
+		guardarProductos(productos);
 		res.send('El producto se guardó');
 	},
 	borrar: function (req, res){
-		productosFinales = contenidoProductos.filter(function(unProducto){
+		let productos = traerProductos();
+		productosFinales = productos.filter(function(unProducto){
 			return unProducto.id != req.params.idProducto;
 		});
-		fs.writeFileSync(ubicacionProductos, JSON.stringify(productosFinales, null, ' '));
+		guardarProductos(productosFinales);
 		res.redirect('/');
 	}
 };
 
-module.exports = controller
+module.exports = controller;
